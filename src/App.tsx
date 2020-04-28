@@ -1,25 +1,37 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Fragment, useState } from 'react';
+import { type } from 'os';
 
-function App() {
+
+type FormElement = React.FormEvent<HTMLFormElement>;
+interface ITasks{
+  name: string;
+  done: boolean;
+}
+
+function App():JSX.Element {
+  
+  
+  const [newTask,setnewTask]= useState<string>('');
+  const [tasks,setTasks]= useState<ITasks[]>([]);
+
+  const handleSubmit = (e: FormElement) =>{
+    e.preventDefault();
+    addTask(newTask);
+    setnewTask('');
+  }
+  const addTask= (name: string) =>{
+    const newTasks: ITasks[]= [...tasks,{name, done:false}];
+    setTasks(newTasks);
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+  <Fragment>
+    <form onSubmit={handleSubmit}>
+        <input type="text" onChange={e => setnewTask(e.target.value)} value={newTask}/>
+          <button>
+          Guardar
+          </button>
+    </form>
+  </Fragment>
   );
 }
 
